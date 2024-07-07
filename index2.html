@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biggest Price and Price Count</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
+</head>
+<body>
+    
+    <section>
+        <header>
+            <h1>Biggest Price and Price Count</h1>
+        </header>
+
+        <!-- table area -->
+        <table id="example" class="table table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>image</th>
+                    <th>name</th>
+                    <th>categories</th>
+                    <th>price</th>
+                    
+                </tr>
+            </thead>
+            <tbody id="price-table">
+                
+            </tbody>
+            
+            
+        </table>
+
+        <div id="price-count"></div>
+
+    </section>
+
+
+    <!-- js library -->
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+    <script>
+        fetch('https://fakestoreapi.com/products')
+        .then(res=>res.json())
+        .then(data=>{
+            console.log("data", data)
+            displayBiggestPrice(data)
+            countPrices(data)
+        })
+
+        function displayBiggestPrice(products) {
+            let maxPrice = 0;
+            let biggestPriceProduct = null;
+            products.forEach((product) => {
+                if (product.price > maxPrice) {
+                    maxPrice = product.price;
+                    biggestPriceProduct = product;
+                }
+            })
+
+            let html = '';
+            html += '<tr>';
+            html += `<td>
+                        <img src="${biggestPriceProduct.image}" style="width:50px;height:50px;border-radius:50%" alt="">
+                     </td>
+                    <td>${biggestPriceProduct.title}</td>
+                    <td>${biggestPriceProduct.category}</td>
+                    <td>${biggestPriceProduct.price}$</td>`;
+            html += '</tr>';
+
+            document.querySelector('#price-table').innerHTML = html;
+        }
+
+        function countPrices(products) {
+            let priceCount = 0;
+            products.forEach((product) => {
+                if (product.price > 0) {
+                    priceCount++;
+                }
+            })
+
+            document.querySelector('#price-count').innerHTML = `Number of products with price: ${priceCount}`;
+        }
+    </script>
+</body>
+</html>
